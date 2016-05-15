@@ -47,11 +47,13 @@ module ActiveModel
 
           def test_array_of_string
             expected = {
-              comments: { author: {}, attachment: {} }
+              comments: { author: {}, attachment: {} },
+              posts: { related_posts: {} }
             }
             input = [
               'comments.author',
-              'comments.attachment'
+              'comments.attachment',
+              'posts.related-posts'
             ]
             actual = Parsing.include_args_to_hash(input)
 

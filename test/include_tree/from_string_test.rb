@@ -10,11 +10,24 @@ module ActiveModel
           assert(actual.key?(:author))
         end
 
+        def test_single_dasherized_string
+          input = 'related-posts'
+          actual = ActiveModel::Serializer::IncludeTree.from_string(input)
+          assert(actual.key?(:related_posts))
+        end
+
         def test_multiple_strings
           input = 'author,comments'
           actual = ActiveModel::Serializer::IncludeTree.from_string(input)
           assert(actual.key?(:author))
           assert(actual.key?(:comments))
+        end
+
+        def test_multiple_dasherized_strings
+          input = 'related-posts,content-templates'
+          actual = ActiveModel::Serializer::IncludeTree.from_string(input)
+          assert(actual.key?(:related_posts))
+          assert(actual.key?(:content_templates))
         end
 
         def test_multiple_strings_with_space
@@ -29,6 +42,13 @@ module ActiveModel
           actual = ActiveModel::Serializer::IncludeTree.from_string(input)
           assert(actual.key?(:posts))
           assert(actual[:posts].key?(:author))
+        end
+
+        def test_nested_hyphenated_string
+          input = 'posts.related-posts'
+          actual = ActiveModel::Serializer::IncludeTree.from_string(input)
+          assert(actual.key?(:posts))
+          assert(actual[:posts].key?(:related_posts))
         end
 
         def test_multiple_nested_string

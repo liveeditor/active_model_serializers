@@ -18,7 +18,7 @@ module ActiveModel
         # @return [Hash] a Hash representing the same tree structure
         def include_string_to_hash(included)
           # TODO: Needs comment walking through the process of what all this is doing.
-          included.delete(' ').split(',').reduce({}) do |hash, path|
+          included.gsub('-', '_').delete(' ').split(',').reduce({}) do |hash, path|
             include_tree = path.split('.').reverse_each.reduce({}) { |a, e| { e.to_sym => a } }
             hash.deep_merge!(include_tree)
           end
@@ -49,6 +49,7 @@ module ActiveModel
             { included => {} }
           when Hash
             included.each_with_object({}) do |(key, value), hash|
+              key = key.is_a?(String) ? key.gsub('-', '_').to_sym : key
               hash[key] = include_args_to_hash(value)
             end
           when Array
